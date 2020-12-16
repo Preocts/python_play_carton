@@ -12,8 +12,16 @@ def loc_cursor(x: int, y: int) -> str:
     return f"\033[{y};{x}f"
 
 
+def out_of_bounds(x: int, y: int) -> bool:
+    horz = 0 <= x <= 96
+    vert = 0 <= y <= 30
+    return not(horz and vert)
+
+
 def print_block(x: int, y: int, block: str) -> None:
     for idx, row in enumerate(block.split("\n")):
+        if out_of_bounds(x + len(row), y):
+            raise Exception(f"Printing out of bounds; {x}, {y}")
         print(f"{loc_cursor(x, y + idx)}{row}")
     return None
 
@@ -27,10 +35,9 @@ def print_centered_row(
     col_start = (col_max - total_space) // 2
     col_size = segment_length + 3
 
-    for block_col, segment in enumerate(segments):
-        for row, block in enumerate(segment.split("\n")):
-            col = col_start + (col_size * block_col)
-            print(f"{loc_cursor(col, row + row_start)}{block}")
+    for block_col, block in enumerate(segments):
+        col = col_start + (col_size * block_col)
+        print_block(col, row_start, block)
 
     return None
 

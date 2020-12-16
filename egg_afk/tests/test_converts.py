@@ -2,6 +2,47 @@
 import unittest
 
 from egg_afk_clock import eggclock
+from egg_afk_clock import fonts
+
+
+class TestMainFunctions(unittest.TestCase):
+
+    def test_print_block(self):
+        with self.assertRaises(Exception):
+            eggclock.print_block(93, 0, "TEST")
+            eggclock.print_block(0, 30, "TEST\nTEST")
+        self.assertIsNone(eggclock.print_block(0, 0, "TEST"))
+
+    def test_print_centered(self):
+        badsegments = [
+            fonts.CHAR_,
+            fonts.CHAR_,
+            fonts.CHAR_,
+            fonts.CHAR_,
+            fonts.CHAR_,
+            fonts.CHAR_,
+            fonts.CHAR_,
+            fonts.CHAR_,
+            fonts.CHAR_,
+            fonts.CHAR_,
+        ]
+        goodsegments = [fonts.CHAR_, fonts.CHAR_, ]
+        with self.assertRaises(Exception):
+            eggclock.print_centered_row(badsegments, 8, 0)
+            eggclock.print_centered_row(goodsegments, 8, 20)
+        self.assertIsNone(eggclock.print_centered_row(goodsegments, 8, 0))
+
+    def test_out_of_bounds(self):
+        self.assertFalse(eggclock.out_of_bounds(0, 0))
+        self.assertFalse(eggclock.out_of_bounds(0, 30))
+        self.assertFalse(eggclock.out_of_bounds(96, 0))
+        self.assertFalse(eggclock.out_of_bounds(96, 30))
+
+        self.assertTrue(eggclock.out_of_bounds(97, 0))
+        self.assertTrue(eggclock.out_of_bounds(0, 31))
+
+    def test_loc_cursor(self):
+        self.assertEqual(eggclock.loc_cursor(1, 2), "\033[2;1f")
 
 
 class TestConverts(unittest.TestCase):
