@@ -5,6 +5,8 @@ Discord : Preocts#8196
 Git Repo: https://github.com/Preocts
 """
 import os
+import argparse
+
 from egg_afk_clock import fonts
 
 
@@ -69,6 +71,24 @@ def args_to_int(args: list) -> tuple:
         return tuple([int(i) for i in args])
     except ValueError:
         return ()
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(
+        description="Set a countdown timer by SS, MM SS, or HH MM SS. Run "
+                    "without arguments for a clock."
+    )
+    parser.add_argument('inputs', metavar="N", type=int, nargs='+')
+
+    args = parser.parse_args()
+
+    print(args)
+    print(args_to_seconds(args.inputs))
+
+
+if __name__ == "__main__":
+    main()
+
 
 # os.system("cls||clear")
 # segments = [fonts.CHAR_E, fonts.CHAR_G, fonts.CHAR_G]
