@@ -68,3 +68,12 @@ class TestConverts(unittest.TestCase):
         self.assertEqual(eggclock.args_to_int(["12", 12]), (12, 12))
         self.assertEqual(eggclock.args_to_int([12, 12]), (12, 12))
         self.assertEqual(eggclock.args_to_int(args=["12", "Clock"]), ())
+
+    def test_int_to_font(self):
+        self.assertEqual(eggclock.int_to_font(1), [fonts.NUM_0, fonts.NUM_1, ])
+        self.assertEqual(
+            eggclock.int_to_font(10),
+            [fonts.NUM_1, fonts.NUM_0, ]
+        )
+
+    

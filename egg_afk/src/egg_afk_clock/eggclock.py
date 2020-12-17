@@ -73,6 +73,21 @@ def args_to_int(args: list) -> tuple:
         return ()
 
 
+def int_to_font(number: int) -> list:
+    if number < 10:
+        blocks = [fonts.NUM_0, fonts.FONT_ENUM[str(number)], ]
+    else:
+        blocks = [
+            fonts.FONT_ENUM[str(number)[0]],
+            fonts.FONT_ENUM[str(number)[-1]],
+        ]
+    return blocks
+
+
+def count_down(seconds: int):
+    pass
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="Set a countdown timer by SS, MM SS, or HH MM SS. Run "
@@ -82,9 +97,15 @@ def main() -> None:
 
     args = parser.parse_args()
 
-    print(args)
-    print(args_to_seconds(args.inputs))
+    seconds = args_to_seconds(args.inputs)
 
+    if seconds:
+        count_down(seconds)
+    else:
+        # TODO: Clock
+        pass
+
+    return None
 
 if __name__ == "__main__":
     main()
