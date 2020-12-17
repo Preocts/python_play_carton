@@ -124,7 +124,7 @@ def print_egg() -> None:
 
 
 def count_down(seconds: int) -> None:
-    while seconds:
+    while seconds >= 0:
         display_clock(seconds)
         seconds -= 1
         time.sleep(1)
