@@ -3,8 +3,13 @@
 Author  : Preocts, preocts@preocts.com
 Discord : Preocts#8196
 Git Repo: https://github.com/Preocts
+
+TODO:
+- Don't use fixed width screen.
+- Add a clock
 """
 import os
+import time
 import argparse
 
 from egg_afk_clock import fonts
@@ -74,6 +79,7 @@ def args_to_int(args: list) -> tuple:
 
 
 def int_to_font(number: int) -> list:
+    """ Translate number to a group of fonts """
     if number < 10:
         blocks = [fonts.NUM_0, fonts.FONT_ENUM[str(number)], ]
     else:
@@ -84,14 +90,41 @@ def int_to_font(number: int) -> list:
     return blocks
 
 
-def count_down(seconds: int):
-    pass
+def assemble_time_block(total_seconds: int) -> tuple:
+    spacer = [fonts.CHAR_, ]
+    hours = int_to_font(total_seconds // 3600)
+    minutes = int_to_font((total_seconds % 3600) // 60)
+    seconds = int_to_font((total_seconds % 3600) % 60)
+    return tuple(hours + spacer + minutes + spacer + seconds)
+
+
+def display_clock(seconds: int) -> None:
+    block = assemble_time_block(seconds)
+    print_centered_row(block, 8, 19)
+    return None
+
+
+def print_egg() -> None:
+    block = [
+        fonts.CHAR_E,
+        fonts.CHAR_G,
+        fonts.CHAR_G,
+    ]
+    print_centered_row(block, 8, 12)
+    return None
+
+
+def count_down(seconds: int) -> None:
+    while seconds:
+        display_clock(seconds)
+        seconds -= 1
+        time.sleep(1)
+    return None
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Set a countdown timer by SS, MM SS, or HH MM SS. Run "
-                    "without arguments for a clock."
+        description="Set a countdown timer by SS, MM SS, or HH MM SS."
     )
     parser.add_argument('inputs', metavar="N", type=int, nargs='+')
 
@@ -99,33 +132,14 @@ def main() -> None:
 
     seconds = args_to_seconds(args.inputs)
 
+    os.system("cls||clear")
+    print_egg()
+
     if seconds:
         count_down(seconds)
-    else:
-        # TODO: Clock
-        pass
 
     return None
 
+
 if __name__ == "__main__":
     main()
-
-
-# os.system("cls||clear")
-# segments = [fonts.CHAR_E, fonts.CHAR_G, fonts.CHAR_G]
-# print_centered_row(segments, 8, 12)
-
-# segments = [
-#     fonts.NUM_0,
-#     fonts.NUM_1,
-#     fonts.CHAR_,
-#     fonts.NUM_2,
-#     fonts.NUM_5,
-#     fonts.CHAR_,
-#     fonts.NUM_0,
-#     fonts.NUM_3,
-# ]
-
-# print_centered_row(segments, 8, 19)
-# while True:
-#     pass

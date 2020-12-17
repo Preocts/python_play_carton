@@ -15,19 +15,19 @@ supported by FIGlet and FIGWin.  May also be slightly modified for better use
 of new full-width/kern/smush alternatives, but default output is NOT changed.
 """
 
-CHAR_E = "_|_|_|_|\n_|      \n_|_|_|  \n_|      \n_|_|_|_|\n"
-CHAR_G = "  _|_|_|\n_|      \n_|  _|_|\n_|    _|\n  _|_|_|\n"
-CHAR_ = "        \n  _|_|  \n        \n  _|_|  \n        \n"
-NUM_0 = "   _|   \n _|  _| \n _|  _| \n _|  _| \n   _|   \n"
-NUM_1 = "   _|   \n _|_|   \n   _|   \n   _|   \n   _|   \n"
-NUM_2 = "  _|_|  \n_|    _|\n    _|  \n  _|    \n_|_|_|_|\n"
-NUM_3 = "_|_|_|  \n      _|\n  _|_|  \n      _|\n_|_|_|  \n"
-NUM_4 = "_|  _|  \n_|  _|  \n_|_|_|_|\n    _|  \n    _|  \n"
-NUM_5 = "_|_|_|_|\n_|      \n_|_|_|  \n      _|\n_|_|_|  \n"
-NUM_6 = "  _|_|_|\n_|      \n_|_|_|  \n_|    _|\n  _|_|  \n"
-NUM_7 = "_|_|_|_|\n       |\n      _|\n    _|  \n  _|    \n"
-NUM_8 = "  _|_|  \n_|    _|\n  _|_|  \n_|    _|\n  _|_|  \n"
-NUM_9 = "  _|_|  \n_|    _|\n  _|_|_|\n      _|\n_|_|_|  \n"
+CHAR_E = "░▒░▒░▒░▒\n░▒      \n░▒░▒░▒  \n░▒      \n░▒░▒░▒░▒\n"
+CHAR_G = "  ░▒░▒░▒\n░▒      \n░▒  ░▒░▒\n░▒    ░▒\n  ░▒░▒░▒\n"
+CHAR_ = "        \n  ░▒░▒  \n        \n  ░▒░▒  \n        \n"
+NUM_0 = "   ░▒   \n ░▒  ░▒ \n ░▒  ░▒ \n ░▒  ░▒ \n   ░▒   \n"
+NUM_1 = "   ░▒   \n ░▒░▒   \n   ░▒   \n   ░▒   \n   ░▒   \n"
+NUM_2 = "  ░▒░▒  \n░▒    ░▒\n    ░▒  \n  ░▒    \n░▒░▒░▒░▒\n"
+NUM_3 = "░▒░▒░▒  \n      ░▒\n  ░▒░▒  \n      ░▒\n░▒░▒░▒  \n"
+NUM_4 = "░▒  ░▒  \n░▒  ░▒  \n░▒░▒░▒░▒\n    ░▒  \n    ░▒  \n"
+NUM_5 = "░▒░▒░▒░▒\n░▒      \n░▒░▒░▒  \n      ░▒\n░▒░▒░▒  \n"
+NUM_6 = "  ░▒░▒░▒\n░▒      \n░▒░▒░▒  \n░▒    ░▒\n  ░▒░▒  \n"
+NUM_7 = "░▒░▒░▒░▒\n      ░▒\n      ░▒\n    ░▒  \n  ░▒    \n"
+NUM_8 = "  ░▒░▒  \n░▒    ░▒\n  ░▒░▒  \n░▒    ░▒\n  ░▒░▒  \n"
+NUM_9 = "  ░▒░▒  \n░▒    ░▒\n  ░▒░▒░▒\n      ░▒\n░▒░▒░▒  \n"
 
 FONT_ENUM = {
     "0": NUM_0,

@@ -76,4 +76,30 @@ class TestConverts(unittest.TestCase):
             [fonts.NUM_1, fonts.NUM_0, ]
         )
 
-    
+    def test_assemble_time_block(self):
+        self.assertEqual(
+            eggclock.assemble_time_block(1),
+            (
+                fonts.NUM_0,
+                fonts.NUM_0,
+                fonts.CHAR_,
+                fonts.NUM_0,
+                fonts.NUM_0,
+                fonts.CHAR_,
+                fonts.NUM_0,
+                fonts.NUM_1,
+            )
+        )
+        self.assertEqual(
+            eggclock.assemble_time_block(38715),
+            (
+                fonts.NUM_1,
+                fonts.NUM_0,
+                fonts.CHAR_,
+                fonts.NUM_4,
+                fonts.NUM_5,
+                fonts.CHAR_,
+                fonts.NUM_1,
+                fonts.NUM_5,
+            )
+        )
