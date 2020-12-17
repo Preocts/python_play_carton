@@ -29,10 +29,10 @@ setup(
     package_dir={'': 'src'},
     install_requires=[
     ],
-    # entry_points={
-    #     'console_scripts': [
-    #         'start-eggbot = eggbot.__main__:main',
-    #     ]
-    # },
+    entry_points={
+        'console_scripts': [
+            'eggtimer=egg_afk_clock.eggclock:main',
+        ]
+    },
     include_package_data=False,
 )
