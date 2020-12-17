@@ -1,4 +1,4 @@
-SRC_DIR=/src/egg_afk_clock
+SRC_DIR=src/egg_afk_clock
 
 .PHONY: update-deps init update install clean clean-pyc clean-build clean-test test package
 
@@ -39,9 +39,9 @@ clean-test: ## Remove test artifacts
 	find . -name '.pytest_cache' -exec rm -fr {} +
 
 blacken: ## Run Black against code
-	black --line-length 79 ./src/eggbot
+	black --line-length 79 ./${SRC_DIR}
 	black --line-length 79 ./tests
 
 test: ## Run all tests found in the /tests directory.
 	coverage run -m pytest tests/
-	coverage report --include "*${SRC_DIR}/*" --show-missing
+	coverage report --include "*/${SRC_DIR}/*" --show-missing

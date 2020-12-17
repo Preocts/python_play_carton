@@ -22,7 +22,7 @@ def loc_cursor(x: int, y: int) -> str:
 def out_of_bounds(x: int, y: int) -> bool:
     horz = 0 <= x <= 96
     vert = 0 <= y <= 30
-    return not(horz and vert)
+    return not (horz and vert)
 
 
 def print_block(x: int, y: int, block: str) -> None:
@@ -33,7 +33,7 @@ def print_block(x: int, y: int, block: str) -> None:
     return None
 
 
-def print_centered_row(
+def print_centered_blocks(
     segments: str, segment_length: int, row_start: int
 ) -> None:
     col_max = 96
@@ -50,14 +50,18 @@ def print_centered_row(
 
 
 def args_to_seconds(args: list) -> int:
-    """ Converts command line args to total seconds
+    """Converts command line args to total seconds
 
-        Min return is 0, defaults to this on any issues.
-        Max seconds is 359,999 (99 hours, 59 minutes, 59 seconds)
-        If minutes are provided, seconds are limited to max 59
-        if hours are provided, minutes and seconds are limited to max 59
+    Min return is 0, defaults to this on any issues.
+    Max seconds is 359,999 (99 hours, 59 minutes, 59 seconds)
+    If minutes are provided, seconds are limited to max 59
+    if hours are provided, minutes and seconds are limited to max 59
     """
-    args_list = [0, 0, 0, ] + args
+    args_list = [
+        0,
+        0,
+        0,
+    ] + args
 
     hours = args_list[-3] * 3600 if 0 < args_list[-3] < 100 else 0
 
@@ -81,7 +85,10 @@ def args_to_int(args: list) -> tuple:
 def int_to_font(number: int) -> list:
     """ Translate number to a group of fonts """
     if number < 10:
-        blocks = [fonts.NUM_0, fonts.FONT_ENUM[str(number)], ]
+        blocks = [
+            fonts.NUM_0,
+            fonts.FONT_ENUM[str(number)],
+        ]
     else:
         blocks = [
             fonts.FONT_ENUM[str(number)[0]],
@@ -91,7 +98,9 @@ def int_to_font(number: int) -> list:
 
 
 def assemble_time_block(total_seconds: int) -> tuple:
-    spacer = [fonts.CHAR_, ]
+    spacer = [
+        fonts.CHAR_,
+    ]
     hours = int_to_font(total_seconds // 3600)
     minutes = int_to_font((total_seconds % 3600) // 60)
     seconds = int_to_font((total_seconds % 3600) % 60)
@@ -100,7 +109,7 @@ def assemble_time_block(total_seconds: int) -> tuple:
 
 def display_clock(seconds: int) -> None:
     block = assemble_time_block(seconds)
-    print_centered_row(block, 8, 19)
+    print_centered_blocks(block, 8, 19)
     return None
 
 
@@ -110,7 +119,7 @@ def print_egg() -> None:
         fonts.CHAR_G,
         fonts.CHAR_G,
     ]
-    print_centered_row(block, 8, 12)
+    print_centered_blocks(block, 8, 12)
     return None
 
 
@@ -126,7 +135,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(
         description="Set a countdown timer by SS, MM SS, or HH MM SS."
     )
-    parser.add_argument('inputs', metavar="N", type=int, nargs='+')
+    parser.add_argument("inputs", metavar="N", type=int, nargs="+")
 
     args = parser.parse_args()
 
