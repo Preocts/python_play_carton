@@ -40,7 +40,7 @@ class LoadAllToml:
                 with open(filename, "rb") as infile:
                     loaded = tomli.load(infile)
             except tomli.TOMLDecodeError:
-                self.log.error("'%s' - invalid toml format")
+                self.log.error("'%s' - invalid toml format", filename)
                 continue
             self._loaded_configs[filename.name] = loaded
             self.log.debug("Loaded: `%s`", filename)
