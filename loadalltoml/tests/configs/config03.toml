@@ -1,0 +1,4 @@
+[config]
+string_value = "test3"
+list_value1 = [ "this", "is", "a", "list",]
+list_value2 = [ "Here", "is", "another", "list",]
