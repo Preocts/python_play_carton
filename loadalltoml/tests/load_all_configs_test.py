@@ -6,6 +6,11 @@ WORKING = Path(__file__).resolve().parent  # Where is this file running?
 CONFIG_PATH = str(WORKING / "configs")
 
 EXPECTED_LOAD_COUNT = 3
+EXPECTED_FILES = [
+    "config01.toml",
+    "config02.toml",
+    "config03.toml",
+]
 
 
 def test_len_of_no_loaded() -> None:
@@ -30,3 +35,11 @@ def test_fall_through_on_invalid_file() -> None:
     loader = LoadAllToml(str(WORKING), "*.py")
     loader.load()
     assert not len(loader)
+
+
+def test_list_configs() -> None:
+    loader = LoadAllToml(CONFIG_PATH)
+    loader.load()
+
+    for filename in EXPECTED_FILES:
+        assert filename in loader.configs
