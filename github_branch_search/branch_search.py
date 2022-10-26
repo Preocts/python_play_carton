@@ -21,39 +21,13 @@ from typing import Sequence
 from github import Github
 from secretbox import SecretBox
 
-FILENAME = "branch-search-report"
+FILENAME = "find-branch-report"
 logger = logging.getLogger()
 
 
-def main() -> int:
-    sb = SecretBox(auto_load=True)
-    git_token = sb.get("GITHUB_TOKEN")
-    base_url = sb.get("BASE_URL")
-    search_for = sb.get("SEARCH_FOR").lower()
-    org_cooldown = float(sb.get("COOLDOWN", "30"))
-    repo_cooldown = float(sb.get("REPO_COOLDOWN", "1"))
-    logging_level = sb.get("LOGGING_LEVEL", "INFO")
-
-    set_logging(logging_level)
-
-    client = Github(base_url=base_url, login_or_token=git_token, per_page=100, retry=5)
-
-    reports = search_all_orgs(client, search_for, org_cooldown, repo_cooldown)
-
-    output_string = to_csv_string(reports)
-    write_to_file(f"{FILENAME}.csv", output_string)
-
-    return 0
-
-
-def search_all_orgs(
-    client: Github,
-    search_for: str,
-    org_cooldown: float,
-    repo_cooldown: float,
-) -> list[dict[str, str]]:
+def search_all_orgs(client: Github, search_for: str) -> list[dict[str, str]]:
     """Search all orgs and repos within for branch matching `search_for`."""
-    good, is_default, is_exists, archived, total = 0, 0, 0, 0, 0
+    good, is_default, is_exists, archived, total_org, total_repo = 0, 0, 0, 0, 0, 0
     reports: list[dict[str, str]] = []
 
     # Off to the races! 三三ᕕ( ᐛ )ᕗ
@@ -61,11 +35,14 @@ def search_all_orgs(
     for org in client.get_organizations():
         logger.info("Organization start: %s", org.login)
         pause_for_ratelimit(client)
-        report = {"org": org.login, "html": org.html_url, "actions": "none"}
+        total_org += 1
+        report = {"org": org.login, "org_html_url": org.html_url, "actions": "none"}
 
         for repo in org.get_repos("all"):
+            report["repo"] = repo.name
+            report["repo_html_url"] = repo.html_url
             pause_for_ratelimit(client)
-            total += 1
+            total_repo += 1
 
             if repo.archived:
                 archived += 1
@@ -84,14 +61,15 @@ def search_all_orgs(
                 logger.info("REPO: %s - Exists but not default", repo.name)
 
             else:
-                logger.info("REPO: %s - No action needed", repo.name)
                 good += 1
+                logger.info("REPO: %s - No action needed", repo.name)
 
-    logger.info("Discovered %s branches", total)
+    logger.info("Discovered %s orgs", total_org)
+    logger.info("Discovered %s repos", total_repo)
     logger.info("No actions: %s", good)
-    logger.info("Was Archived: %s", archived)
-    logger.info("Was default: %s", is_default)
-    logger.info("Was found: %s", is_exists)
+    logger.info("Repo was Archived: %s", archived)
+    logger.info("'%s' branch is default: %s", search_for, is_default)
+    logger.info("'%s' branch was found: %s", search_for, is_exists)
 
     return reports
 
@@ -159,6 +137,25 @@ def set_logging(level: str) -> None:
     logging.getLogger().setLevel(level)
     logging.getLogger().addHandler(filehandler)
     logging.getLogger().addHandler(stderrhandler)
+
+
+def main() -> int:
+    sb = SecretBox(auto_load=True)
+    git_token = sb.get("GITHUB_TOKEN")
+    base_url = sb.get("BASE_URL")
+    search_for = sb.get("SEARCH_FOR").lower()
+    logging_level = sb.get("LOGGING_LEVEL", "INFO")
+
+    set_logging(logging_level)
+
+    client = Github(base_url=base_url, login_or_token=git_token, per_page=100, retry=5)
+
+    reports = search_all_orgs(client, search_for)
+
+    output_string = to_csv_string(reports)
+    write_to_file(f"{FILENAME}.csv", output_string)
+
+    return 0
 
 
 if __name__ == "__main__":
