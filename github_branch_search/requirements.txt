@@ -1,0 +1,2 @@
+pygithub==1.56
+secretbox==2.7.0
