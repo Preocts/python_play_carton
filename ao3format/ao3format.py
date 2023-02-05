@@ -18,7 +18,7 @@ BOXES = {
     "notes": "\n".join(
         [
             '<div class="WordBox SanSerifFonts">',
-            '\t<p class="CardTitle">About</p>',
+            '\t<p class="CardTitle">Author Notes</p>',
             '\t<p class="CardBody">{content}</p>',
             "</div>",
         ],
