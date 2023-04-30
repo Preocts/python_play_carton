@@ -1,9 +1,9 @@
 from __future__ import annotations
 
+import argparse
 import re
 from datetime import datetime
 
-# Year as YYYY
 YEAR = str(datetime.now().year)
 BOXES = {
     # Little boxes on the hillside, little boxes made of ticky-tacky
@@ -69,11 +69,32 @@ def create_header(lines: list[str]) -> str:
     return "\n".join(headers) + "\n"
 
 
-def main() -> int:
-    """Main function."""
-    with open("in.txt", "r") as infile:
-        lines = infile.readlines()
+def create_text_header(lines: list[str]) -> list[str]:
+    """Create header for plain text."""
+    headers: list[str] = []
+    for line in lines:
+        match = re.match(r"^(:.+:).*$", line)
+        if match:
+            label = match.group(1).lstrip(":")
+            content = format_line(line.replace(match.group(1), "").strip())
+            headers.append(f"{label:<12}{content}\n")
+    return headers
 
+
+def read_file(filename: str) -> list[str]:
+    """Read a file and return its lines."""
+    with open(filename, "r") as infile:
+        return infile.readlines()
+
+
+def save_file(filename: str, lines: list[str]) -> None:
+    """Save a file."""
+    with open(filename, "w") as outfile:
+        outfile.writelines(lines)
+
+
+def format_ao3(lines: list[str]) -> list[str]:
+    """Format a story for AO3."""
     new_lines: list[str] = []
     new_lines.append(create_boxes(lines))
     new_lines.append(CONTENT_START + "\n")
@@ -85,11 +106,35 @@ def main() -> int:
     new_lines.append(SPACER + "\n")
     new_lines.append(CONTENT_END + "\n")
 
-    new_lines = [line for line in new_lines if line != "<p></p>\n" and line]
-    with open("out.txt", "w") as outfile:
-        outfile.writelines(new_lines)
-    return 0
+    return [line for line in new_lines if line != "<p></p>\n" and line]
+
+
+def format_txt(lines: list[str]) -> list[str]:
+    """Format a story as plain text."""
+    new_lines: list[str] = []
+    new_lines.extend(create_text_header(lines))
+    new_lines.append("\n***\n\n")
+    for line in lines:
+        if line.strip() and not line.startswith(":"):
+            new_lines.append(f"{format_line(line)}\n\n")
+    return new_lines
+
+
+def parse_args() -> argparse.Namespace:
+    """Parse command-line arguments."""
+    parser = argparse.ArgumentParser()
+    parser.add_argument("filename", help="name of file to format", type=str)
+    return parser.parse_args()
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    args = parse_args()
+    lines = read_file(args.filename)
+
+    # Save Ao3 file
+    save_file(f"ao3_{args.filename}", format_ao3(lines))
+
+    # Save txt file
+    save_file(f"txt_{args.filename}", format_txt(lines))
+
+    raise SystemExit(0)
