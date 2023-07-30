@@ -77,7 +77,10 @@ def create_text_header(lines: list[str]) -> list[str]:
         if match:
             label = match.group(1).lstrip(":")
             content = format_line(line.replace(match.group(1), "").strip())
-            headers.append(f"{label:<12}{content}\n")
+            if label == "copyright:":
+                headers.append(f"{label:<12}{content} ©{YEAR}\n")
+            else:
+                headers.append(f"{label:<12}{content}\n")
     return headers
 
 
@@ -131,10 +134,12 @@ if __name__ == "__main__":
     args = parse_args()
     lines = read_file(args.filename)
 
+    filestem = args.filename.split(".")[0]
+
     # Save Ao3 file
-    save_file(f"ao3_{args.filename}", format_ao3(lines))
+    save_file(f"{filestem}_ao3.txt", format_ao3(lines))
 
     # Save txt file
-    save_file(f"txt_{args.filename}", format_txt(lines))
+    save_file(f"{filestem}_txt.txt", format_txt(lines))
 
     raise SystemExit(0)
